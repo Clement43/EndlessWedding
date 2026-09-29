@@ -1,3 +1,23 @@
 #canvas {
 	border: 2px solid #333;
 }
+
+body {
+  margin: 0;
+}
+
+#app {
+  min-height: 0dvh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#canvas {
+  display: block;
+  width: min(100%, 800px, calc((100dvh - 32px) * 2));
+  height: auto;
+  aspect-ratio: 2 / 1;
+  border: 2px solid #333;
+}
