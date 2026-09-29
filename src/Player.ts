@@ -1,30 +1,13 @@
-export class Player {
-    private x: number;
-    private y: number;
+import { Entity } from "./Entity";
+
+export class Player extends Entity {
     private isJumping: boolean;
     private velocityY: number;
 
     constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+        super( y, x, 10, 10); // width, height, y, x
         this.isJumping = false;
         this.velocityY = 0;
-    }
-
-    public getX(): number {
-        return this.x;
-    }
-
-    public getY(): number {
-        return this.y;
-    }
-
-    public setX(x: number): void {
-        this.x = x;
-    }
-
-    public setY(y: number): void {
-        this.y = y;
     }
 
     public getIsJumping(): boolean {

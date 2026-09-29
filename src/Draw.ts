@@ -1,3 +1,4 @@
+import type { Obstacle } from "./Obstacle"
 import type { Player } from "./Player"
 
 export class Draw {
@@ -6,6 +7,7 @@ export class Draw {
     private groundImage: HTMLImageElement
     private groundOffset: number
     private groundSpeed: number
+    // private obstacleOffset: number
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas
@@ -43,15 +45,29 @@ export class Draw {
 
     public drawGround(deltaTime: number): void {
         if (!this.groundImage.complete || this.groundImage.naturalWidth === 0) {
+
             return
         }
 
         const groundWidth = this.groundImage.naturalWidth
         this.groundOffset = (this.groundOffset + this.groundSpeed * deltaTime) % groundWidth
+        //A deplacer pour mettre le widht de l'obstacle
+        
         const groundY = this.canvas.height - this.groundImage.naturalHeight
         for (let x = -this.groundOffset; x < this.canvas.width; x += groundWidth) {
             this.ctx.drawImage(this.groundImage, x, groundY)
         }
+    }
+
+    public drawObstacle(obstacles: Obstacle[], deltaTime:number): void {
+        obstacles.forEach(obstacle => {
+        obstacle.setObstacleOffset((obstacle.getObstacleOffset() + this.groundSpeed * deltaTime) % (this.canvas.width + obstacle.getWidth()));
+
+        obstacle.setX(-obstacle.getObstacleOffset());
+        obstacle.setX(obstacle.getX() + this.canvas.width);
+        this.ctx.rect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
+        this.ctx.fill()
+        })
     }
 
 
