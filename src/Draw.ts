@@ -4,10 +4,6 @@ import type { Player } from "./Player"
 export class Draw {
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
-    private groundImage: HTMLImageElement
-    private groundOffset: number
-    private groundSpeed: number
-    // private obstacleOffset: number
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas
@@ -16,12 +12,8 @@ export class Draw {
             throw new Error('Unable to get 2D canvas context')
         }
         this.ctx = ctx
-        this.groundOffset = 0
-        this.groundSpeed = 0
 
-        this.groundImage = new Image()
-        this.groundImage.src = new URL('../asset/Ground.png', import.meta.url).href
-    }
+        }
 
     public drawCircle(x: number, y: number, radius: number, color: string): void {
 
@@ -43,25 +35,11 @@ export class Draw {
 
     }
 
-    public drawGround(deltaTime: number): void {
-        if (!this.groundImage.complete || this.groundImage.naturalWidth === 0) {
 
-            return
-        }
 
-        const groundWidth = this.groundImage.naturalWidth
-        this.groundOffset = (this.groundOffset + this.groundSpeed * deltaTime) % groundWidth
-        //A deplacer pour mettre le widht de l'obstacle
-        
-        const groundY = this.canvas.height - this.groundImage.naturalHeight
-        for (let x = -this.groundOffset; x < this.canvas.width; x += groundWidth) {
-            this.ctx.drawImage(this.groundImage, x, groundY)
-        }
-    }
-
-    public drawObstacle(obstacles: Obstacle[], deltaTime:number): void {
+    public drawObstacle(obstacles: Obstacle[], deltaTime:number, speed: number): void {
         obstacles.forEach(obstacle => {
-        obstacle.setObstacleOffset((obstacle.getObstacleOffset() + this.groundSpeed * deltaTime) % (this.canvas.width + obstacle.getWidth()));
+        obstacle.setObstacleOffset((obstacle.getObstacleOffset() + speed * deltaTime) % (this.canvas.width + obstacle.getWidth()));
 
         obstacle.setX(-obstacle.getObstacleOffset());
         obstacle.setX(obstacle.getX() + this.canvas.width);
@@ -71,8 +49,5 @@ export class Draw {
     }
 
 
-    public setGroundSpeed(speed: number): void {
-        this.groundSpeed = speed
-    }
 
 }

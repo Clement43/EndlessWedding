@@ -1,15 +1,19 @@
 import { Controller } from './Controller'
 import { Draw } from './Draw'
+import { DrawnLandscape } from './DrawnLandscape'
 import { Obstacle } from './Obstacle'
 import { Physics } from './Physics'
 import { Player } from './Player'
 import './style.css'
+
+
 // import heroImg from './assets/hero.png'
 // import typescriptLogo from './assets/typescript.svg'
 // import viteLogo from './assets/vite.svg'
 
 const heightGround = 21;
 const cavansheight = 400;
+let  speedGame = 0; // Speed of the game, can be changed to make the game more difficult
 
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -39,6 +43,9 @@ let player = new Player(50, yGroundPlayer);
 new Controller(player);
 let physics = new Physics();
 let obstacle = new Obstacle(50, 50 , yGroundObstacle);
+
+let newDrawnGround = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Ground.png');
+let newDrawnShadow = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Shadow.png');
 // let obstacle2 = new Obstacle(30, 30 , yGroundObstacle);
 
 let lsiteObstacle = [obstacle];
@@ -58,7 +65,6 @@ function mainLoop(currentTime: number) {
     // les mouvements a la duree reelle de chaque frame.
     const deltaTime = previousFrameTime === 0 ? 0 : (currentTime - previousFrameTime) / 1000;
     previousFrameTime = currentTime;
-    console.log("deltaTime: ", deltaTime);
     draw.clearCanvas();
     physics.applyGravity(player, currentTime);
 
@@ -66,9 +72,12 @@ function mainLoop(currentTime: number) {
         player.setY(yGroundPlayer);
         player.setIsJumping(false);
     }
-    draw.drawGround(deltaTime);
+    newDrawnShadow.drawLandscape(deltaTime, speedGame / 4);
+    newDrawnGround.drawLandscape(deltaTime, speedGame);
+  
+
     draw.drawPlayer(player);
-    draw.drawObstacle(lsiteObstacle, deltaTime);
+    draw.drawObstacle(lsiteObstacle, deltaTime, speedGame);
     colisionDetection(player, lsiteObstacle);
     if (isGameRunning) {
         requestAnimationFrame(mainLoop);
@@ -94,5 +103,5 @@ function colisionDetection(player: Player, obstacles: Obstacle[]): boolean {
 }
 
 function playGame() {
-    draw.setGroundSpeed(200); // Example speed
+    speedGame = 200; // Example speed
 }
