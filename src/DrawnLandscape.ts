@@ -6,20 +6,17 @@ export class DrawnLandscape {
     private image: HTMLImageElement
     private canvas: HTMLCanvasElement
     private ctx: CanvasRenderingContext2D
-    private speed: number
 
     constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, imgUrl: string) {
         this.offset = 0
         this.canvas = canvas
         this.ctx = ctx
-        this.speed = 0
         this.image = new Image()
         this.image.src = new URL(imgUrl, import.meta.url).href
     }
 
         public drawLandscape(deltaTime: number, speed: number): void {
         if (!this.image.complete || this.image.naturalWidth === 0) {
-
             return
         }
 
@@ -32,4 +29,5 @@ export class DrawnLandscape {
             this.ctx.drawImage(this.image, x, groundY)
         }
     }
+
 }

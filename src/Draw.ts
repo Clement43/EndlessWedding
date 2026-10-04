@@ -15,13 +15,6 @@ export class Draw {
 
         }
 
-    public drawCircle(x: number, y: number, radius: number, color: string): void {
-
-       this.ctx.beginPath()
-       this.ctx.arc(x, y, radius, 0, 2 * Math.PI)
-       this.ctx.fillStyle = color
-       this.ctx.fill()
-    }
 
     public clearCanvas(): void {
         this.ctx.beginPath();
@@ -29,12 +22,11 @@ export class Draw {
     }
 
     public drawPlayer(player: Player): void {
-
+        this.ctx.beginPath();
         this.ctx.rect(player.getX(), player.getY(), 10, 10);
         this.ctx.fill()
 
     }
-
 
 
     public drawObstacle(obstacles: Obstacle[], deltaTime:number, speed: number): void {
@@ -43,10 +35,30 @@ export class Draw {
 
         obstacle.setX(-obstacle.getObstacleOffset());
         obstacle.setX(obstacle.getX() + this.canvas.width);
+        this.ctx.beginPath();
         this.ctx.rect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
         this.ctx.fill()
         })
     }
+
+    public drawScore(text: string, fontSize: number): void {
+    this.ctx.font = `${fontSize}px Triton`
+    
+    let positionX = this.canvas.clientWidth - this.ctx.measureText(text).width - 20;
+    
+
+    this.ctx.fillStyle = "#2366a9"
+    this.ctx.beginPath();
+    this.ctx.roundRect(positionX-10, 10, this.ctx.measureText(text).width + 20, 25, 10);
+    this.ctx.fill();
+
+    this.ctx.fillStyle = "#faf7f6"
+    this.ctx.fillText(text, positionX, 30)
+
+
+}
+    
+
 
 
 

@@ -1,3 +1,9 @@
+
+@font-face {
+  font-family: "Triton";
+  src: url("/font/triton.ttf") format("truetype");
+}
+
 #canvas {
 	border: 2px solid #333;
 }
@@ -21,3 +27,4 @@ body {
   aspect-ratio: 2 / 1;
   border: 2px solid #333;
 }
+

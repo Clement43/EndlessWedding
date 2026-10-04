@@ -44,18 +44,18 @@ new Controller(player);
 let physics = new Physics();
 let obstacle = new Obstacle(50, 50 , yGroundObstacle);
 
-let newDrawnGround = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Ground.png');
-let newDrawnShadow = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Shadow.png');
+let drawnGround = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Ground.png');
+let drawnShadow = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Shadow.png');
 // let obstacle2 = new Obstacle(30, 30 , yGroundObstacle);
 
 let lsiteObstacle = [obstacle];
 
 draw.drawPlayer(player);
-draw.drawCircle(200, 200, 50, 'red');
 draw.clearCanvas();
 
 let previousFrameTime: number = 0;
 let isGameRunning: boolean = true;
+let score: number = 0;
 
 requestAnimationFrame(mainLoop);
 
@@ -72,9 +72,12 @@ function mainLoop(currentTime: number) {
         player.setY(yGroundPlayer);
         player.setIsJumping(false);
     }
-    newDrawnShadow.drawLandscape(deltaTime, speedGame / 4);
-    newDrawnGround.drawLandscape(deltaTime, speedGame);
-  
+    drawnShadow.drawLandscape(deltaTime, speedGame / 4);
+    drawnGround.drawLandscape(deltaTime, speedGame);
+
+    score += deltaTime * speedGame / 10;
+    draw.drawScore("SCORE: " + Math.floor(score), 20);
+
 
     draw.drawPlayer(player);
     draw.drawObstacle(lsiteObstacle, deltaTime, speedGame);
