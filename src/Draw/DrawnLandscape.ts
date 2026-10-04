@@ -1,18 +1,13 @@
+import { Draw } from "./Draw"
 
 //Class that allows drawing the background that moves with the run
-export class DrawnLandscape {
+export class DrawnLandscape extends Draw {
 
-    private offset: number
-    private image: HTMLImageElement
-    private canvas: HTMLCanvasElement
-    private ctx: CanvasRenderingContext2D
 
-    constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, imgUrl: string) {
-        this.offset = 0
-        this.canvas = canvas
-        this.ctx = ctx
-        this.image = new Image()
-        this.image.src = new URL(imgUrl, import.meta.url).href
+
+    constructor(imgUrl: string) {
+        super(imgUrl)
+
     }
 
         public drawLandscape(deltaTime: number, speed: number): void {

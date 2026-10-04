@@ -1,6 +1,7 @@
 import { Controller } from './Controller'
-import { Draw } from './Draw'
-import { DrawnLandscape } from './DrawnLandscape'
+import { Draw } from './Draw/Draw'
+import { DrawnLandscape } from './Draw/DrawnLandscape'
+import { DrawObstacle } from './Draw/DrawObstacle'
 import { Obstacle } from './Obstacle'
 import { Physics } from './Physics'
 import { Player } from './Player'
@@ -20,7 +21,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 <canvas id="canvas" width="800" height="${cavansheight}"></canvas>
 <button id="playBtn">Jouer</button>
 `
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
 //Boutton play to start the game, hide the button and start the game loop
 const bouton = document.getElementById("playBtn");
@@ -38,17 +38,20 @@ const yGroundPlayer = cavansheight - heightGround - 10;
 const yGroundObstacle = cavansheight - heightGround - 50;
 
 //Init the new objects for the game
-let draw = new Draw(canvas);
+let draw = new Draw();
 let player = new Player(50, yGroundPlayer);
 new Controller(player);
 let physics = new Physics();
-let obstacle = new Obstacle(50, 50 , yGroundObstacle);
 
-let drawnGround = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Ground.png');
-let drawnShadow = new DrawnLandscape(canvas, canvas.getContext('2d')!, '../asset/Shadow.png');
-// let obstacle2 = new Obstacle(30, 30 , yGroundObstacle);
 
-let lsiteObstacle = [obstacle];
+let drawnGround = new DrawnLandscape('/asset/Ground.png');
+let drawnShadow = new DrawnLandscape('/asset/Shadow.png');
+
+let drawnObstacle = new DrawObstacle('/asset/Arche.png', 10, yGroundObstacle, 50, 50 );
+let drawnObstacle2 = new DrawObstacle('/asset/Arche.png', 125, yGroundObstacle, 50, 50 );
+
+// let obstacle = new Obstacle(50, 50 , 10, yGroundObstacle);
+let listeObstacle = [drawnObstacle, drawnObstacle2];
 
 draw.drawPlayer(player);
 draw.clearCanvas();
@@ -68,7 +71,7 @@ function mainLoop(currentTime: number) {
     draw.clearCanvas();
     physics.applyGravity(player, currentTime);
 
-    if (player.getY() > canvas.height - heightGround) {
+    if (player.getY() > draw.getCanvas().height - heightGround) {
         player.setY(yGroundPlayer);
         player.setIsJumping(false);
     }
@@ -78,22 +81,24 @@ function mainLoop(currentTime: number) {
     score += deltaTime * speedGame / 10;
     draw.drawScore("SCORE: " + Math.floor(score), 20);
 
+    listeObstacle.forEach(obstacleDraw => {
+        obstacleDraw.drawObstacle(deltaTime, speedGame);
+         colisionDetection(player, obstacleDraw.obstacle);
+    });
 
     draw.drawPlayer(player);
-    draw.drawObstacle(lsiteObstacle, deltaTime, speedGame);
-    colisionDetection(player, lsiteObstacle);
+
     if (isGameRunning) {
         requestAnimationFrame(mainLoop);
     }
 }
 
 
-function colisionDetection(player: Player, obstacles: Obstacle[]): boolean {
-    for (const obstacle of obstacles) {
-        if (
-            player.getX() < obstacle.getX() + obstacle.getWidth() &&
-            player.getX() + player.getWidth() > obstacle.getX() &&
-            player.getY() < obstacle.getY() + obstacle.getHeight() &&
+function colisionDetection(player: Player, obstacle: Obstacle): boolean {
+    if (
+        player.getX() < obstacle.getX() + obstacle.getWidth() &&
+        player.getX() + player.getWidth() > obstacle.getX() &&
+        player.getY() < obstacle.getY() + obstacle.getHeight() &&
             player.getY() + player.getHeight() > obstacle.getY()
 
         ) {
@@ -101,7 +106,7 @@ function colisionDetection(player: Player, obstacles: Obstacle[]): boolean {
             isGameRunning = false;
 
         }
-    }
+    
     return false; // No collision
 }
 

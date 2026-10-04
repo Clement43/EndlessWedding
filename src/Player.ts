@@ -5,7 +5,7 @@ export class Player extends Entity {
     private velocityY: number;
 
     constructor(x: number, y: number) {
-        super( y, x, 10, 10); // width, height, y, x
+        super( x, y, 10, 10); // width, height, y, x
         this.isJumping = false;
         this.velocityY = 0;
     }

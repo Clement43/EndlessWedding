@@ -1,18 +1,24 @@
-import type { Obstacle } from "./Obstacle"
-import type { Player } from "./Player"
+import type { Obstacle } from "../Obstacle"
+import type { Player } from "../Player"
 
 export class Draw {
-    private canvas: HTMLCanvasElement
-    private ctx: CanvasRenderingContext2D
 
-    constructor(canvas: HTMLCanvasElement) {
-        this.canvas = canvas
+    protected canvas: HTMLCanvasElement
+    protected ctx: CanvasRenderingContext2D
+    protected offset: number
+    protected image: HTMLImageElement
+
+
+    constructor(imgUrl: string = "") {
+        this.canvas =  document.getElementById('canvas') as HTMLCanvasElement;
         const ctx = this.canvas.getContext('2d')
         if (!ctx) {
             throw new Error('Unable to get 2D canvas context')
         }
         this.ctx = ctx
-
+        this.image = new Image()
+        this.image.src = new URL(imgUrl, import.meta.url).href
+        this.offset = 0
         }
 
 
@@ -29,18 +35,6 @@ export class Draw {
     }
 
 
-    public drawObstacle(obstacles: Obstacle[], deltaTime:number, speed: number): void {
-        obstacles.forEach(obstacle => {
-        obstacle.setObstacleOffset((obstacle.getObstacleOffset() + speed * deltaTime) % (this.canvas.width + obstacle.getWidth()));
-
-        obstacle.setX(-obstacle.getObstacleOffset());
-        obstacle.setX(obstacle.getX() + this.canvas.width);
-        this.ctx.beginPath();
-        this.ctx.rect(obstacle.getX(), obstacle.getY(), obstacle.getWidth(), obstacle.getHeight());
-        this.ctx.fill()
-        })
-    }
-
     public drawScore(text: string, fontSize: number): void {
     this.ctx.font = `${fontSize}px Triton`
     
@@ -56,6 +50,10 @@ export class Draw {
     this.ctx.fillText(text, positionX, 30)
 
 
+}
+
+public getCanvas(): HTMLCanvasElement {
+    return this.canvas;
 }
     
 

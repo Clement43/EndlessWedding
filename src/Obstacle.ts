@@ -6,11 +6,10 @@ export class Obstacle extends Entity {
     // private imlage: HTMLImageElement;
     private obstacleOffset: number = 0; 
 
-    constructor(width: number, height: number, y:number ) {
-
-        // this.imlage = new Image();
-        // this.imlage.src = new URL('../asset/Obstacle.png', import.meta.url).href;
-        super( y, 900, width, height); // width, height, y, x
+    constructor(x: number, y: number, width: number, height: number) {
+        
+        super(x, y, width, height); // width, height, y, x
+        this.obstacleOffset = x;
     }
 
     public getObstacleOffset(): number {

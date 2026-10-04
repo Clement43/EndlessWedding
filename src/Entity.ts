@@ -5,7 +5,7 @@ export abstract class Entity {
     private width: number;
     private height: number;
 
-    constructor( y:number , x: number ,width: number, height: number,) {
+    constructor( x:number , y: number ,width: number, height: number,) {
         this.x = x;
         this.y = y;
         this.width = width;
