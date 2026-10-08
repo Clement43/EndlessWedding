@@ -10,19 +10,23 @@ export class DrawnLandscape extends Draw {
 
     }
 
-        public drawLandscape(deltaTime: number, speed: number): void {
+        public drawLandscape(deltaTime: number, speed: number, renderHeight?: number): void {
         if (!this.image.complete || this.image.naturalWidth === 0) {
             return
         }
 
-        const groundWidth = this.image.naturalWidth
+        const groundHeight = renderHeight ?? this.image.naturalHeight * 2
+        const groundWidth = Math.round(this.image.naturalWidth * groundHeight / this.image.naturalHeight)
         this.offset = (this.offset + speed * deltaTime) % groundWidth
         //A deplacer pour mettre le widht de l'obstacle
         
-        const groundY = this.canvas.height - this.image.naturalHeight
-        for (let x = -this.offset; x < this.canvas.width; x += groundWidth - 1) {
-            this.ctx.drawImage(this.image, x, groundY)
+        const groundY = this.canvas.height - groundHeight
+        for (let x = -this.offset; x < this.canvas.width; x += groundWidth) {
+            this.ctx.drawImage(this.image, Math.round(x), groundY, groundWidth, groundHeight)
         }
     }
 
+    public reset(): void {
+        this.offset = 0;
+    }
 }

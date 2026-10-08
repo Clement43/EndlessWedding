@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+import type { Player } from './Player';
 
 export class Obstacle extends Entity {
 
@@ -19,4 +20,10 @@ export class Obstacle extends Entity {
         this.obstacleOffset = offset;
     }
 
+    public collidesWith(player: Player): boolean {
+        return player.getX() + 7 < this.getX() + this.getWidth() - 4
+            && player.getX() + player.getWidth() - 7 > this.getX() + 4
+            && player.getY() + 5 < this.getY() + this.getHeight()
+            && player.getY() + player.getHeight() - 3 > this.getY() + 4;
+    }
 }

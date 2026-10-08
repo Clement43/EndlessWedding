@@ -1,24 +1,26 @@
-import type { Player } from "./Player";
-
 export class Controller {
+    private readonly abort = new AbortController();
 
-private player: Player;
-
-    constructor(player: Player) {
-        this.player = player;
-        document.addEventListener('keydown', (event) => {
-            if (event.key === ' ') {
-                if (!this.player.getIsJumping()) {
-                this.jump();
-                }
+    constructor(canvas: HTMLCanvasElement, jump: () => void, pause: () => void) {
+        const options = { signal: this.abort.signal };
+        canvas.addEventListener('keydown', (event) => {
+            if (['Space', 'ArrowUp', 'KeyW'].includes(event.code)) {
+                event.preventDefault();
+                if (!event.repeat) jump();
             }
-        });
+            if (['Escape', 'KeyP'].includes(event.code)) {
+                event.preventDefault();
+                if (!event.repeat) pause();
+            }
+        }, options);
+        canvas.addEventListener('pointerdown', (event) => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            canvas.focus({ preventScroll: true });
+            jump();
+        }, options);
     }
 
-
-    //jump the player
-    private jump() {
-        this.player.setVelocityY(-5); // Set an initial upward velocity
-        this.player.setIsJumping(true);
+    public destroy(): void {
+        this.abort.abort();
     }
 }

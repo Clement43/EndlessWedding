@@ -1,13 +1,25 @@
 import { Entity } from "./Entity";
 
+export type Character = 'bride' | 'groom';
+
 export class Player extends Entity {
     private isJumping: boolean;
     private velocityY: number;
+    private character: Character;
 
-    constructor(x: number, y: number) {
-        super( x, y, 10, 10); // width, height, y, x
+    constructor(x: number, y: number, character: Character = 'bride') {
+        super(x, y, 32, 48);
         this.isJumping = false;
         this.velocityY = 0;
+        this.character = character;
+    }
+
+    public getCharacter(): Character {
+        return this.character;
+    }
+
+    public setCharacter(character: Character): void {
+        this.character = character;
     }
 
     public getIsJumping(): boolean {
