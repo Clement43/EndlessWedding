@@ -9,15 +9,16 @@ export class DrawObstacle extends Draw {
         super(imgUrl)
         this.obstacle = new Obstacle(x, y, width, height);
     }
+    
 
     public drawObstacle( deltaTime:number, speed: number): void {
 
-        this.obstacle.setObstacleOffset((this.obstacle.getObstacleOffset() + speed * deltaTime) % (this.canvas.width + this.obstacle.getWidth()));
+        this.obstacle.setObstacleOffset((this.obstacle.getObstacleOffset() + speed * deltaTime));
 
         this.obstacle.setX(-this.obstacle.getObstacleOffset());
         this.obstacle.setX(this.obstacle.getX() + this.canvas.width);
         this.ctx.beginPath();
-        this.ctx.rect(this.obstacle.getX(), this.obstacle.getY(), this.obstacle.getWidth(), this.obstacle.getHeight());
+        this.ctx.drawImage(this.image, this.obstacle.getX(), this.obstacle.getY(), this.obstacle.getWidth(), this.obstacle.getHeight());
         this.ctx.fill()
     }
 

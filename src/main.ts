@@ -47,20 +47,21 @@ let physics = new Physics();
 let drawnGround = new DrawnLandscape('/asset/Ground.png');
 let drawnShadow = new DrawnLandscape('/asset/Shadow.png');
 
-let drawnObstacle = new DrawObstacle('/asset/Arche.png', 10, yGroundObstacle, 50, 50 );
-let drawnObstacle2 = new DrawObstacle('/asset/Arche.png', 125, yGroundObstacle, 50, 50 );
+let tempsDepuisDernierObstacle = 0;
+let drawnObstacle = new DrawObstacle('/asset/Obstacle1.png', 10, yGroundObstacle, 50, 50 );
 
 // let obstacle = new Obstacle(50, 50 , 10, yGroundObstacle);
-let listeObstacle = [drawnObstacle, drawnObstacle2];
+let listeObstacle = [drawnObstacle];
 
 draw.drawPlayer(player);
 draw.clearCanvas();
 
 let previousFrameTime: number = 0;
-let isGameRunning: boolean = true;
+let isGameRunning: boolean = false;
 let score: number = 0;
 
 requestAnimationFrame(mainLoop);
+
 
 //Loop execute all draw and anniamtion function
 function mainLoop(currentTime: number) {
@@ -81,9 +82,20 @@ function mainLoop(currentTime: number) {
     score += deltaTime * speedGame / 10;
     draw.drawScore("SCORE: " + Math.floor(score), 20);
 
+
+    tempsDepuisDernierObstacle += deltaTime;
+    if (tempsDepuisDernierObstacle >= 2 ) {
+        listeObstacle.push(new DrawObstacle('/asset/Obstacle1.png', 0, yGroundObstacle, 50, 50));
+        tempsDepuisDernierObstacle -= 2;
+    }
+
+    console.log("Nombre d'obstacles: " + listeObstacle.length);
     listeObstacle.forEach(obstacleDraw => {
         obstacleDraw.drawObstacle(deltaTime, speedGame);
          colisionDetection(player, obstacleDraw.obstacle);
+        if(obstacleDraw.obstacle.getX() + obstacleDraw.obstacle.getWidth() < 0) {
+            listeObstacle.shift();
+        }
     });
 
     draw.drawPlayer(player);
@@ -112,4 +124,7 @@ function colisionDetection(player: Player, obstacle: Obstacle): boolean {
 
 function playGame() {
     speedGame = 200; // Example speed
+    isGameRunning = true;
+    requestAnimationFrame(mainLoop);
+
 }
