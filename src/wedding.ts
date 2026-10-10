@@ -5,7 +5,7 @@ export const wedding = {
     venue: 'Domaine des Oliviers',
     region: 'Provence',
     replyBefore: '19 mai 2027',
-    googleFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScTYSRPi5zaVS8GOA1wXXN5n3Zce8aLD8zfTtn8RoxMQg-mow/viewform?usp=publish-editor',
+    googleFormUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfihuJfIbPO88bdFkNKa3k74wYqhR0gODipWHIYzXY86NijBw/viewform?usp=publish-editor',
     program: [
         { time: '15:30', title: 'Le grand oui', detail: 'La cérémonie, entourés de vous.', icon: 'heart' },
         { time: '17:00', title: "Un toast à l'amour", detail: 'Un cocktail et beaucoup de sourires.', icon: 'wine' },
